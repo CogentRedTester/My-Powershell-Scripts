@@ -6,6 +6,8 @@ Change-Refresh - changes the refresh rate of an attached monitor (monitor 2), de
 
 Get-Onedrive-Direct-Link - converts a regular Onedrive share link into a direct download link
 
+Get-IP-Info.ps1 - prints information about the computers external ip
+
 youtube-dl - calls youtube-dl, asks for the url input, saves the file in $home\Videos
 
 youtube-dl-audio - same as above but converts the video into mp3 and saves it to $home\Music
