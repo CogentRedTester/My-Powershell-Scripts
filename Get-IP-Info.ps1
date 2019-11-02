@@ -4,7 +4,7 @@
 "-----External IP Info -----"
 ""
 $ipinfo = Invoke-RestMethod http://ipinfo.io/json 
-"IP:                        " + $ipinfo.ip
+"External-IP:               " + $ipinfo.ip
 "Hostname:                  " + $ipinfo.hostname 
 "City:                      " + $ipinfo.city 
 "Region:                    " + $ipinfo.region 
