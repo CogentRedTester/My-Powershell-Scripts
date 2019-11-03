@@ -4,9 +4,11 @@ Bypass-Execution-Policy - disables the restrictions on running scripts for the s
 
 Change-Refresh - changes the refresh rate of an attached monitor (monitor 2), designed to be run from within mpv player
 
+Get-IP-Info.ps1 - prints information about the computers external ip
+
 Get-Onedrive-Direct-Link - converts a regular Onedrive share link into a direct download link
 
-Get-IP-Info.ps1 - prints information about the computers external ip
+Get-Network-Devices - prints list of devices connected to the local network
 
 youtube-dl - calls youtube-dl, asks for the url input, saves the file in $home\Videos
 
