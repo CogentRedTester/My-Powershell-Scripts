@@ -15,8 +15,6 @@ $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
   ConvertFrom-Csv -Header Computername,IPv4,MAC,x,Vendor|
                    Select Computername,IPv4,MAC
 
-
-
 ""				   
 "-----------Local Network Devices-----------"
 
