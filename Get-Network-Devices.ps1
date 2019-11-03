@@ -13,16 +13,11 @@ $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
 # for each found device, lookup names
 ForEach ($Computer in $Computers){
 	Try{
-		$Computer.Computername = [System.Net.Dns]::GetHostByAddress($Computer.ipv4).Hostname
+		$Computer.Computername = [System.Net.Dns]::GetHostEntry($Computer.ipv4).Hostname
 	}
 	Catch{
 		"Could not get Hostname for " + $Computer.ipv4
 	}
-	
-	nslookup $Computer.IPv4|Select-String -Pattern "^Name:\s+([^\.]+).*$"|
-    ForEach-Object{
-      $Computer.Computername = $_.Matches.Groups[1].Value
-    }
 }
 
 ""				   
