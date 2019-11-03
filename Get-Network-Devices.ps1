@@ -1,6 +1,5 @@
 # Code adapted from: https://stackoverflow.com/questions/41785413/use-powershell-to-get-device-names-and-their-ipaddress-on-a-home-network/41797841#41797841
 
-$Comuters
 
 # Ping subnet to find connected devices
 $Subnet = "192.168.20."
@@ -11,10 +10,6 @@ $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
   ConvertFrom-Csv -Header Computername,IPv4,MAC,x,Vendor|
                    Select Computername,IPv4,MAC
 
-""				   
-"-----Local Network Devices-----"
-""
-				   
 # for each found device, lookup names
 ForEach ($Computer in $Computers){
 	Try{
@@ -23,7 +18,27 @@ ForEach ($Computer in $Computers){
 	Catch{
 		"Could not get Hostname for " + $Computer.ipv4
 	}
+	
+	nslookup $Computer.IPv4|Select-String -Pattern "^Name:\s+([^\.]+).*$"|
+    ForEach-Object{
+      $Computer.Computername = $_.Matches.Groups[1].Value
+    }
 }
 
+""				   
+"-----------Local Network Devices-----------"
 $Computers
-#$Computers | Out-Gridview
+
+#""
+#"--------------Current Machine--------------"
+#""
+
+$localhost = [System.Net.Dns]::GetHostName()
+
+$localComputer = Get-WmiObject win32_networkadapterconfiguration `
+	| Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress `
+	| Where IPAddress -NE $null
+
+#New-Object PsObject -Property @{ Computername = "Computername" ; IPv4 = "IPv4"; MAC = "MAC" }
+New-Object PsObject -Property @{ Computername = "------------" ; IPv4 = "--------------"; MAC = "-----------------" }
+New-Object PsObject -Property @{ Computername = $localhost ; IPv4 = $localComputer.IPAddress; MAC = $localComputer.MacAddress }
