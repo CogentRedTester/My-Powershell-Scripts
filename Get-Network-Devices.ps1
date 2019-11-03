@@ -7,7 +7,8 @@ $localComputer = Get-WmiObject win32_networkadapterconfiguration `
 	| Where IPAddress -NE $null
 
 # Ping subnet to find connected devices
-$SubNet = $localComputer.IPAddress.Substring(0, $localComputer.IPAddress.lastIndexOf('.'))
+$SubNet = $localComputer.IPAddress.Substring(0, $localComputer.IPAddress.lastIndexOf('.') + 1)
+
 1..254|ForEach-Object{
     Start-Process -WindowStyle Hidden ping.exe -Argumentlist "-n 1 -l 0 -f -i 2 -w 1 -4 $SubNet$_"
 }
