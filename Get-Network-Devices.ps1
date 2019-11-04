@@ -22,33 +22,29 @@ $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
 ""				   
 "-----------Local Network Devices-----------"
 
-# for each found device, lookup names
-ForEach ($Computer in $Computers){
-	Try{
-		#starts an asyncronous DNS query
-		$DNSQuery = [System.Net.Dns]::GetHostEntryAsync($Computer.ipv4)
-		$AlreadyFound = 0
-		$msecs = 0.0
-		
-		#checks if the query has completed every 0.5 seconds. After 3 seconds it timeouts 
-		while ((!$AlreadyFound) -and ($msecs -lt 3000)){
-			Start-Sleep -Milliseconds 500
-			if ($DNSQuery.IsCompleted){
-				$Computer.Computername = [System.Net.Dns]::GetHostEntry($Computer.ipv4).Hostname
-				$AlreadyFound = 1
-			}
-			$msecs += 500
-		}
-		if ($msecs -eq 3000){
-			"DNS Timeout: " + $Computer.ipv4
+#test if the DNS resolver is working
+#the first Computer will be the default gateway, so it should return almost immediately
+$DNSQuery = [System.Net.Dns]::GetHostEntryAsync($Computers[0].ipv4)
+Start-Sleep(3)
+
+#if the query has completed in 3 seconds then the DNS resolver is working and the other hostnames are searched for
+if ($DNSQuery.IsCompleted){
+	# for each found device, lookup names
+	ForEach ($Computer in $Computers){
+		Try{
+			$Computer.Computername = [System.Net.Dns]::GetHostEntry($Computer.ipv4).Hostname
+			
+		} Catch{
+			"error finding hostname: " + $Computer.ipv4
 		}
 	}
-	Catch{
-		"error finding hostname: " + $Computer.ipv4
-	}
+} else {
+	"DNS timeout - cannot find hostnames"
 }
 
-$Computers
 
-New-Object PsObject -Property @{ Computername = "------------" ; IPv4 = "--------------"; MAC = "-----------------" }
-New-Object PsObject -Property @{ Computername = $localhost ; IPv4 = $localComputer.IPAddress; MAC = $localComputer.MacAddress }
+
+$Computers += New-Object PsObject -Property @{ Computername = "------------" ; IPv4 = "--------------"; MAC = "-----------------" }
+$Computers += New-Object PsObject -Property @{ Computername = $localhost ; IPv4 = $localComputer.IPAddress; MAC = $localComputer.MacAddress }
+
+$Computers
