@@ -2,7 +2,8 @@
 
 Bypass-Execution-Policy - disables the restrictions on running scripts for the session
 
-Change-Refresh - changes the refresh rate of an attached monitor (monitor 2), designed to be run from within mpv player
+Change-Refresh - changes the refresh rate of the monitor, designed to be run from within mpv player
+               - syntax is Change-Refresh [monitor number/name] [width] [height] [refreshrate]
 
 Get-IP-Info.ps1 - prints information about the computers external ip
 
