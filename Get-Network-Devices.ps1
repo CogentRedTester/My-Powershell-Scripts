@@ -16,11 +16,19 @@ Try {
     Start-Process -WindowStyle Hidden ping.exe -Argumentlist "-n 1 -l 0 -f -i 2 -w 1 -4 $SubNet$_"
 }
 $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
-  ConvertFrom-Csv -Header Computername,IPv4,MAC,x,Vendor|
-                   Select Computername,IPv4,MAC
+  ConvertFrom-Csv -Header Computername,IPv4,MAC,x,Vendor, Ping|
+                   Select Computername,IPv4,MAC, Ping
 
-""				   
-"-----------Local Network Devices-----------"
+#run a ping test for each valid ip
+ForEach ($Computer in $Computers) {
+	$ping = (Test-Connection -TargetName $Computer.IPv4 -Ping -Count 1)
+	if ($ping.Replies.Status -eq "TimedOut") {
+		$Computer.Ping = "timeout"
+	} else {
+		$pingtime = $ping.Replies.RoundtripTime
+		$Computer.Ping = "$pingtime" + "ms"
+	}
+}
 
 #test if the DNS resolver is working
 #the first Computer will be the default gateway, so it should return almost immediately
@@ -39,10 +47,14 @@ if ($DNSQuery.IsCompleted){
 		}
 	}
 } else {
+	""
 	"DNS timeout - cannot find hostnames"
 }
 
-
+""
+""
+""				   
+"-------------Local Network Devices-------------"
 
 $Computers += New-Object PsObject -Property @{ Computername = "------------" ; IPv4 = "--------------"; MAC = "-----------------" }
 $Computers += New-Object PsObject -Property @{ Computername = $localhost ; IPv4 = $localComputer.IPAddress; MAC = $localComputer.MacAddress }
