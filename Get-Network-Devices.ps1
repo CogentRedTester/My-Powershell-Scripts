@@ -2,7 +2,7 @@
 
 $localhost = [System.Net.Dns]::GetHostName()
 
-$localComputer = Get-WmiObject win32_networkadapterconfiguration `
+$localComputer = Get-CimInstance win32_networkadapterconfiguration `
 	| Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress `
 	| Where IPAddress -NE $null
 
