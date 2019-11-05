@@ -1,4 +1,4 @@
-$URL = Read-Host -Prompt 'Enter Onedrive URL: '
+$URL = Read-Host -Prompt 'Enter Onedrive URL'
 
 #tries to run using powershell 5 command, if that fails tries powershell 6 workaround
 Try {
