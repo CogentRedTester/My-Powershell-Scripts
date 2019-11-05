@@ -6,6 +6,8 @@ Change-Refresh - changes the refresh rate of the monitor, designed to be run fro
                
                Change-Refresh [monitor number/name] [width] [height] [refreshrate]
 
+Elevate-Shell - launches an administrator powershell window and closes the current window
+
 Get-IP-Info.ps1 - prints information about the computers external ip
 
 Get-Network-Devices - prints list of devices connected to the local network
