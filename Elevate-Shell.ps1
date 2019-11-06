@@ -1,2 +1,2 @@
-Start-Process powershell -Verb runAs
+Start-Process pwsh -Verb runAs
 Stop-Process -Id $PID
