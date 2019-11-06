@@ -1,7 +1,8 @@
 youtube-dl -U
 
 if (!$args) {
-    $URL = Read-Host -Prompt 'Enter URL'
+    $URL = Read-Host -Prompt 'Enter Audio URL'
+    $URL = $URL.split(" ")
 } else {
     $URL = $args
 }
