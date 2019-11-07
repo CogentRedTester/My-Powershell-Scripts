@@ -5,6 +5,8 @@
 Try {
     $clip = Get-ClipboardText
 } Catch [System.Management.Automation.CommandNotFoundException] {
+    "Module ClipboardText not found - please install Module: "
+    ""
     Install-Module -Name ClipboardText
     $clip = Get-ClipboardText
 }
