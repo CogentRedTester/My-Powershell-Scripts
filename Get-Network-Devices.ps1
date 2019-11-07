@@ -4,7 +4,8 @@ $localhost = [System.Net.Dns]::GetHostName()
 
 $localComputer = Get-CimInstance win32_networkadapterconfiguration `
 	| Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress `
-	| Where IPAddress -NE $null
+	| Where-Object IPAddress -NE $null
+
 
 # Ping subnet to find connected devices
 Try {
@@ -17,7 +18,8 @@ Try {
 }
 $Computers =(arp.exe -a | Select-String "$SubNet.*dynam") -replace ' +',','|
   ConvertFrom-Csv -Header Computername,IPv4,MAC,x,Vendor, Ping|
-                   Select Computername,IPv4,MAC, Ping
+                   Select-Object Computername,IPv4,MAC, Ping
+
 
 #run a ping test for each valid ip
 ForEach ($Computer in $Computers) {
@@ -29,6 +31,7 @@ ForEach ($Computer in $Computers) {
 		$Computer.Ping = "$pingtime" + "ms"
 	}
 }
+
 
 #test if the DNS resolver is working
 #the first Computer will be the default gateway, so it should return almost immediately
