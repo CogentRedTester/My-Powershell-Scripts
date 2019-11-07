@@ -23,16 +23,11 @@ if (!$args) {
     $URL = $args[0]
 }
 
-#tries to run using powershell 5 command, if that fails tries powershell 6 workaround
+#tries to expand the link
 Try {
-    $LongURL = (Invoke-WebRequest -uri $URL -MaximumRedirection 0 -ErrorAction Ignore).Headers.Location   
-
+    $LongURL = [System.Net.HttpWebRequest]::Create($URL).GetResponse().ResponseUri.AbsoluteUri
 } Catch {
-    Try {
-        Invoke-WebRequest -uri $URL -MaximumRedirection 0
-    } Catch {
-        $LongURL = $_.Exception.Response.Headers.Location
-    }
+    "ERROR: invalid URL"
 }
 
 #if anything went wrong with the web request then $LongURL will equal null
@@ -48,5 +43,5 @@ if (!$null -eq $LongURL) {
     "Direct Link copied to clipboard"
 } else {
     ""
-    "ERROR: invalid input, could not find Direct Link"
+    "ERROR: could not find Direct Link"
 }
