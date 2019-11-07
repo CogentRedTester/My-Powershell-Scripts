@@ -2,4 +2,5 @@
 
 ""
 "-----External IP Info -----"
-Invoke-RestMethod http://ipinfo.io/json
+Invoke-RestMethod http://ipinfo.io/json |
+    Select-Object -ExcludeProperty readme
