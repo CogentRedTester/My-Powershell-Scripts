@@ -8,6 +8,25 @@ $width = $args[1]
 $height = $args[2]
 $refresh = $args[3]
 
+#finds the monitor from the display name which mpv player passes
+#if the value is an int then the direct int is used - this would be for when manually running the script
+#keep in mind that nircmd starts counting displays from 0 while the system display names start from 1
+if ($monitor.GetType().name -eq ("String")) {
+	Try {
+		$monitor = $monitor.Substring($monitor.length - 1, 1)
+		$monitor = [convert]::ToInt32($monitor, 10)
+		$monitor --
+	} Catch {
+		"string is not a valid display name"
+	}
+}
+
+#makes sure the display integer is not below 0
+if ($monitor -lt 0) {
+	$monitor = 0;
+	"display number is less than 0, setting to 0"
+	}
+
 #rounds the framerate down to the nearest integer - nircmd does not like floats
 $refresh=[math]::floor($refresh)
 
