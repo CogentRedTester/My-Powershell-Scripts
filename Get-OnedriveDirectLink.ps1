@@ -7,7 +7,9 @@ if (!$args) {
     if (!($null -eq $clip) -and $clip.contains("1drv.ms")) {
         $URL = $clip
 
-        "found url in clipboard: " + $clip
+        Write-Host "found url in clipboard: " -ForegroundColor cyan -NoNewline
+        Write-Host $URL -ForegroundColor green
+        Write-Host
     } else {
         $URL = Read-Host -Prompt 'Enter Onedrive URL'
     }
@@ -27,12 +29,12 @@ Try {
 if (!$null -eq $LongURL) {
     $DirectLink = $LongURL -replace "redir", "download"
 
-    "Direct Link: " + $DirectLink
+    Write-Host "Direct Link: " -ForegroundColor Cyan -NoNewline
+    Write-Host $DirectLink -ForegroundColor Green
 
     #The normal clip.exe adds a newline to the end of the string
     $DirectLink | Set-Clipboard
-
-    "Direct Link copied to clipboard"
+    Write-Host "Direct Link copied to clipboard" -ForegroundColor Magenta
 } else {
     ""
     "ERROR: could not find Direct Link"
