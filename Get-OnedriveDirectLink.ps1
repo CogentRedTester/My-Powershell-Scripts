@@ -1,15 +1,5 @@
-#Get-ClipboardText & Set-ClipboardText from:
-#https://www.powershellgallery.com/packages/ClipboardText/
-
 #asks the user to install the module if it does not exist on the system
-Try {
-    $clip = Get-ClipboardText
-} Catch [System.Management.Automation.CommandNotFoundException] {
-    "Module ClipboardText not found - please install Module: "
-    ""
-    Install-Module -Name ClipboardText
-    $clip = Get-ClipboardText
-}
+$clip = Get-Clipboard
 
 #if a parameter is not entered, then ask for one
 #if there is no parameter and the clipboard contains a onedrive shortened url then uses that without asking
@@ -40,7 +30,7 @@ if (!$null -eq $LongURL) {
     "Direct Link: " + $DirectLink
 
     #The normal clip.exe adds a newline to the end of the string
-    $DirectLink | Set-ClipboardText
+    $DirectLink | Set-Clipboard
 
     "Direct Link copied to clipboard"
 } else {
